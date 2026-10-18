@@ -4,7 +4,6 @@ coverage/
 src/generated/
 
 .env
-.env.test
 
 *.log
 .DS_Store
