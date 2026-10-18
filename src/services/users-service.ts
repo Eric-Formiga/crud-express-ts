@@ -1,7 +1,7 @@
 import { hash } from 'bcrypt'
 import { prisma } from '../database/prisma'
 import type { Prisma } from '../generated/prisma/client'
-import type { CreateUserInput } from '../schemas/user-schema'
+import type { CreateUserInput, UpdateUserInput } from '../schemas/user-schema'
 import { AppError } from '../utils/app-error'
 
 const PASSWORD_SALT_ROUNDS = 10
@@ -49,5 +49,32 @@ export class UsersService {
     }
 
     return user
+  }
+
+  async update(id: string, { name, email, password }: UpdateUserInput) {
+    await this.findById(id)
+
+    if (email) {
+      const userWithSameEmail = await prisma.user.findUnique({ where: { email } })
+
+      if (userWithSameEmail && userWithSameEmail.id !== id) {
+        throw new AppError('Email already in use', 409)
+      }
+    }
+
+    const passwordHash = password ? await hash(password, PASSWORD_SALT_ROUNDS) : undefined
+
+    // Campos undefined são ignorados pelo Prisma (não são alterados)
+    return prisma.user.update({
+      where: { id },
+      data: { name, email, password: passwordHash },
+      select: userPublicFields,
+    })
+  }
+
+  async remove(id: string) {
+    await this.findById(id)
+
+    await prisma.user.delete({ where: { id } })
   }
 }

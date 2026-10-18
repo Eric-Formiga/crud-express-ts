@@ -11,9 +11,12 @@ export const errorHandling: ErrorRequestHandler = (error, _request, response, _n
   }
 
   if (error instanceof ZodError) {
+    // formErrors: erros do objeto como um todo (ex.: refine); fieldErrors: erros por campo
+    const { formErrors, fieldErrors } = z.flattenError(error)
+
     response.status(400).json({
-      message: 'Validation error',
-      issues: z.flattenError(error).fieldErrors,
+      message: formErrors[0] ?? 'Validation error',
+      issues: fieldErrors,
     })
     return
   }
@@ -21,6 +24,12 @@ export const errorHandling: ErrorRequestHandler = (error, _request, response, _n
   // Violação de campo @unique (ex.: duas requisições criando o mesmo email ao mesmo tempo)
   if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
     response.status(409).json({ message: 'Resource already exists' })
+    return
+  }
+
+  // Registro não encontrado (ex.: apagado entre a checagem e o update/delete)
+  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+    response.status(404).json({ message: 'Resource not found' })
     return
   }
 

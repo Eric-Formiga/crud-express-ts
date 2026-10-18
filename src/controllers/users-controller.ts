@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import { createUserSchema, userIdParamsSchema } from '../schemas/user-schema'
+import { createUserSchema, updateUserSchema, userIdParamsSchema } from '../schemas/user-schema'
 import { UsersService } from '../services/users-service'
 
 const usersService = new UsersService()
@@ -25,5 +25,22 @@ export class UsersController {
     const user = await usersService.create(data)
 
     response.status(201).json(user)
+  }
+
+  async update(request: Request, response: Response) {
+    const { id } = userIdParamsSchema.parse(request.params)
+    const data = updateUserSchema.parse(request.body)
+
+    const user = await usersService.update(id, data)
+
+    response.json(user)
+  }
+
+  async remove(request: Request, response: Response) {
+    const { id } = userIdParamsSchema.parse(request.params)
+
+    await usersService.remove(id)
+
+    response.status(204).send()
   }
 }

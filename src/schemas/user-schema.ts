@@ -10,8 +10,14 @@ export const createUserSchema = z.object({
     .max(72, 'Password must have at most 72 characters'),
 })
 
+// Todos os campos opcionais, mas pelo menos um precisa ser enviado
+export const updateUserSchema = createUserSchema
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, 'At least one field must be provided')
+
 export const userIdParamsSchema = z.object({
   id: z.uuid('Invalid user id'),
 })
 
 export type CreateUserInput = z.infer<typeof createUserSchema>
+export type UpdateUserInput = z.infer<typeof updateUserSchema>
