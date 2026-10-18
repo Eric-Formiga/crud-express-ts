@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs'
-import { defineConfig, env } from 'prisma/config'
+import { defineConfig } from 'prisma/config'
 
 // O Prisma CLI não carrega o .env sozinho
 if (existsSync('.env')) {
@@ -12,6 +12,8 @@ export default defineConfig({
     path: 'prisma/migrations',
   },
   datasource: {
-    url: env('DATABASE_URL'),
+    // process.env em vez do helper env(): o env() exige a variável até no `prisma generate`
+    // (que não conecta no banco), quebrando o `npm install` sem .env (ex.: no CI)
+    url: process.env.DATABASE_URL,
   },
 })
