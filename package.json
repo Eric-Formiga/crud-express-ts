@@ -1,0 +1,40 @@
+{
+  "name": "crud-express-ts",
+  "version": "1.0.0",
+  "description": "API REST de usuários (CRUD) feita com Node.js, Express e TypeScript.",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eric-Formiga/crud-express-ts.git"
+  },
+  "keywords": [],
+  "author": "Eric Formiga",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Eric-Formiga/crud-express-ts/issues"
+  },
+  "homepage": "https://github.com/Eric-Formiga/crud-express-ts#readme",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.5",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.2"
+  },
+  "main": "dist/server.js",
+  "engines": {
+    "node": ">=20"
+  }
+}
