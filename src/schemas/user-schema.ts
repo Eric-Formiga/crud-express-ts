@@ -10,4 +10,8 @@ export const createUserSchema = z.object({
     .max(72, 'Password must have at most 72 characters'),
 })
 
+export const userIdParamsSchema = z.object({
+  id: z.uuid('Invalid user id'),
+})
+
 export type CreateUserInput = z.infer<typeof createUserSchema>
