@@ -30,4 +30,24 @@ export class UsersService {
       select: userPublicFields,
     })
   }
+
+  async list() {
+    return prisma.user.findMany({
+      select: userPublicFields,
+      orderBy: { createdAt: 'desc' },
+    })
+  }
+
+  async findById(id: string) {
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: userPublicFields,
+    })
+
+    if (!user) {
+      throw new AppError('User not found', 404)
+    }
+
+    return user
+  }
 }
