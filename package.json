@@ -27,6 +27,7 @@
   "homepage": "https://github.com/Eric-Formiga/crud-express-ts#readme",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.5",
     "eslint": "^10.13.0",
@@ -45,6 +46,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
+    "bcrypt": "^6.0.0",
     "express": "^5.3.0",
     "zod": "^4.6.7"
   }

@@ -1,6 +1,7 @@
 import type { ErrorRequestHandler } from 'express'
 import { z, ZodError } from 'zod'
 import { env } from '../env'
+import { Prisma } from '../generated/prisma/client'
 import { AppError } from '../utils/app-error'
 
 export const errorHandling: ErrorRequestHandler = (error, _request, response, _next) => {
@@ -14,6 +15,12 @@ export const errorHandling: ErrorRequestHandler = (error, _request, response, _n
       message: 'Validation error',
       issues: z.flattenError(error).fieldErrors,
     })
+    return
+  }
+
+  // Violação de campo @unique (ex.: duas requisições criando o mesmo email ao mesmo tempo)
+  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+    response.status(409).json({ message: 'Resource already exists' })
     return
   }
 
