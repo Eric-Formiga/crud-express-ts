@@ -13,7 +13,9 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:unit": "vitest run --project unit",
+    "test:e2e": "vitest run --project e2e"
   },
   "repository": {
     "type": "git",

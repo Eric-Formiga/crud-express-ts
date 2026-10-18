@@ -11,10 +11,27 @@ if (!testEnv.DATABASE_URL?.includes('_test')) {
 
 export default defineConfig({
   test: {
-    env: testEnv,
-    globalSetup: ['./src/tests/setup/global-setup.ts'],
-    setupFiles: ['./src/tests/setup/setup.ts'],
-    // Os testes compartilham o mesmo banco, então não podem rodar em paralelo
-    fileParallelism: false,
+    projects: [
+      {
+        // Unitários: peças isoladas, sem banco de dados
+        test: {
+          name: 'unit',
+          include: ['src/tests/unit/**/*.test.ts'],
+          env: testEnv,
+        },
+      },
+      {
+        // E2E: requisições HTTP passando por todas as camadas até o banco de teste
+        test: {
+          name: 'e2e',
+          include: ['src/tests/e2e/**/*.test.ts'],
+          env: testEnv,
+          globalSetup: ['./src/tests/setup/global-setup.ts'],
+          setupFiles: ['./src/tests/setup/setup.ts'],
+          // Os testes compartilham o mesmo banco, então não podem rodar em paralelo
+          fileParallelism: false,
+        },
+      },
+    ],
   },
 })
